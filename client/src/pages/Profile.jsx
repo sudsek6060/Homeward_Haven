@@ -11,6 +11,9 @@ import {
   updateUserStart,
   updateUserSuccess,
   updateUserFailure,
+  deleteUserStart,
+  deleteUserSuccess,
+  deleteUserFailure,
 } from "../redux/user/userSlice";
 
 // firebase storage
@@ -82,7 +85,7 @@ const Profile = () => {
         body: JSON.stringify(formData),
       });
       const data = await res.json();
-      console.log(data);
+
       if (data.success === false) {
         dispatch(updateUserFailure(data.message));
         return;
@@ -91,6 +94,22 @@ const Profile = () => {
       setUpdateSuccess(true);
     } catch (error) {
       dispatch(updateUserFailure(error.message));
+    }
+  };
+  const handleDelete = async () => {
+    try {
+      dispatch(deleteUserStart());
+      const res = await fetch(`api/user/delete/${currentuser._id}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (data.success === false) {
+        dispatch(deleteUserFailure(data.message));
+        return;
+      }
+      dispatch(deleteUserSuccess(data));
+    } catch (error) {
+      dispatch(deleteUserFailure(error.message));
     }
   };
   return (
@@ -153,7 +172,9 @@ const Profile = () => {
         </button>
       </form>
       <div className="flex justify-between mt-2">
-        <span className="text-red-500 cursor-pointer">Delete account </span>
+        <span onClick={handleDelete} className="text-red-500 cursor-pointer">
+          Delete account{" "}
+        </span>
         <span className="text-purple-700 cursor-pointer">Sign out </span>
       </div>
       {error && <p className="text-red-500 mt-5">{error}</p>}
