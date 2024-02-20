@@ -14,6 +14,9 @@ import {
   deleteUserStart,
   deleteUserSuccess,
   deleteUserFailure,
+  signOutUserFailure,
+  signOutUserStart,
+  signOutUserSuccess,
 } from "../redux/user/userSlice";
 
 // firebase storage
@@ -99,7 +102,7 @@ const Profile = () => {
   const handleDelete = async () => {
     try {
       dispatch(deleteUserStart());
-      const res = await fetch(`api/user/delete/${currentuser._id}`, {
+      const res = await fetch(`/api/user/delete/${currentuser._id}`, {
         method: "DELETE",
       });
       const data = await res.json();
@@ -110,6 +113,22 @@ const Profile = () => {
       dispatch(deleteUserSuccess(data));
     } catch (error) {
       dispatch(deleteUserFailure(error.message));
+    }
+  };
+
+  const handleSignOut = async () => {
+    try {
+      dispatch(signOutUserStart());
+      const res = await fetch("/api/auth/signout");
+      const data = await res.json();
+
+      if (data.success === false) {
+        dispatch(signOutUserFailure(data.message));
+        return;
+      }
+      dispatch(signOutUserSuccess(data));
+    } catch (error) {
+      dispatch(signOutUserFailure(error.message));
     }
   };
   return (
@@ -175,7 +194,12 @@ const Profile = () => {
         <span onClick={handleDelete} className="text-red-500 cursor-pointer">
           Delete account{" "}
         </span>
-        <span className="text-purple-700 cursor-pointer">Sign out </span>
+        <span
+          onClick={handleSignOut}
+          className="text-purple-700 cursor-pointer"
+        >
+          Sign out{" "}
+        </span>
       </div>
       {error && <p className="text-red-500 mt-5">{error}</p>}
       {updateSuccess && (
