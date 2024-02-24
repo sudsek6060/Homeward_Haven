@@ -43,9 +43,9 @@ const Profile = () => {
   const [userListings, setUserListings] = useState([]);
   const fileRef = useRef(null);
   const dispatch = useDispatch();
-  console.log(currentuser);
-  console.log(formData);
-  console.log(userListings);
+  // console.log(currentuser);
+  // console.log(formData);
+  // console.log(userListings);
 
   useEffect(() => {
     if (file) {
