@@ -1,10 +1,28 @@
 import { FaSearch } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 
 const Header = () => {
   const { currentuser } = useSelector((state) => state.user);
-  console.log(currentuser);
+  const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const urlParams = new URLSearchParams(window.location.search);
+    urlParams.set("searchTerm", searchTerm);
+    const searchQuery = urlParams.toString();
+    navigate(`/search?${searchQuery}`);
+  };
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const searchTermFromUrl = urlParams.get("searchTerm");
+    if (searchTermFromUrl) {
+      setSearchTerm(searchTermFromUrl);
+    }
+  }, [location.search]);
   return (
     <header className="bg-gradient-to-r from-gray-200 to-indigo-900 text-base sm:text-xl">
       <div className="flex justify-between items-center max-w-6xl mx-auto p-3">
@@ -14,13 +32,20 @@ const Header = () => {
             <span className="text-gray-600">Haven</span>
           </h1>
         </Link>
-        <form className="flex items-center bg-slate-100 p-3 rounded-lg ">
+        <form
+          onSubmit={handleSubmit}
+          className="flex items-center bg-slate-100 p-3 rounded-lg "
+        >
           <input
             type="text"
             placeholder="Search..."
             className="bg-transparent focus:outline-none"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <FaSearch />
+          <button>
+            <FaSearch />
+          </button>
         </form>
         <ul className="flex gap-3 text-gray-300 ">
           <Link to="/">
