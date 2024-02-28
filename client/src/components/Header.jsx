@@ -2,6 +2,7 @@ import { FaSearch } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
+import imageSrc from "../assets/logo.svg";
 
 const Header = () => {
   const { currentuser } = useSelector((state) => state.user);
@@ -25,12 +26,13 @@ const Header = () => {
   }, [location.search]);
   return (
     <header className="bg-gradient-to-r from-gray-200 to-indigo-900 text-base sm:text-xl">
-      <div className="flex justify-between items-center max-w-6xl mx-auto p-3">
+      <div className="flex justify-between items-center max-w-7xl mx-auto p-3">
         <Link to="/">
-          <h1 className="font-bold text-sm sm:text-2xl flex flex-wrap">
+          <img className="w-40 h-10" src={imageSrc} alt="logo" />
+          {/* <h1 className="font-bold text-sm sm:text-2xl flex flex-wrap">
             <span className="text-indigo-400">Homeward</span>
             <span className="text-gray-600">Haven</span>
-          </h1>
+          </h1> */}
         </Link>
         <form
           onSubmit={handleSubmit}
